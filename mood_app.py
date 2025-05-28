@@ -1,3 +1,4 @@
+import json
 import streamlit as st
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -9,11 +10,12 @@ from streamlit_autorefresh import st_autorefresh
 # Auto-refresh every 60 seconds
 st_autorefresh(interval=60 * 1000, key="data_refresh")
 
-# Setup Google Sheets
+# Use Streamlit Secrets
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("wise-baton-461122-f1-83caeddbbeaa.json", scope)
+credentials_dict = st.secrets["google_service_account"]
+creds = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict, scope)
 client = gspread.authorize(creds)
-sheet = client.open("MoodLogger").sheet1  # Make sure your Sheet name matches
+sheet = client.open("MoodLogger").sheet1
 
 # Streamlit UI
 st.set_page_config(page_title="Mood of the Queue", page_icon="🧠")
