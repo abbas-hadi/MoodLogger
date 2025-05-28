@@ -1,4 +1,3 @@
-import json
 import streamlit as st
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -7,18 +6,18 @@ import plotly.express as px
 from datetime import datetime, date
 from streamlit_autorefresh import st_autorefresh
 
+st.set_page_config(page_title="Mood of the Queue", page_icon="🧠")
+
 # Auto-refresh every 60 seconds
 st_autorefresh(interval=60 * 1000, key="data_refresh")
 
-# Use Streamlit Secrets
+# Setup Google Sheets using Streamlit Secrets
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 credentials_dict = st.secrets["google_service_account"]
 creds = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict, scope)
 client = gspread.authorize(creds)
 sheet = client.open("MoodLogger").sheet1
 
-# Streamlit UI
-st.set_page_config(page_title="Mood of the Queue", page_icon="🧠")
 st.title("🧠 Mood of the Queue")
 
 # Mood Entry Form
